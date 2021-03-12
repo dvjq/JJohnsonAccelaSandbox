@@ -1,4 +1,4 @@
-eval(getScriptText("CONFIGURABLE_SCRIPTS_COMMON");
+eval(getScriptText("CONFIGURABLE_SCRIPTS_COMMON"));
 var recStatus = getRecordStatus();
 logDebug("in expiredRecordStatus: " + recStatus);
 if (recStatus == "Expired"){

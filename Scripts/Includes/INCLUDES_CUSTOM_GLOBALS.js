@@ -9,67 +9,14 @@
 /------------------------------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------------------------------------------/
 | Custom Parameters
-|	Ifchanges are made, please add notes above.
 /------------------------------------------------------------------------------------------------------*/
-acaUrl = "https://acastd.accela.com/standarddemo/";
-aaUrl = "https://avstd.accela.com";
+acaUrl = "https://aca-civcon.accela.com/ps01";
+aaUrl = "https://ps36-civcon-av.accela.com/";
+agis = "https://agis-civcon.accela.com/jsagis/";
 
-//if (currentUserID == "DPRUSER") showDebug=true;
+if (currentUserID == "ADMIN" || currentUserID == "JJOHNSON") showDebug=true;
 
-var ENVIRON = "STANDARDDEMO";
+var ENVIRON = "JJohnsonAccelaSandbox";
 /*------------------------------------------------------------------------------------------------------/
 | END Custom Parameters
 /------------------------------------------------------------------------------------------------------*/
-
-function parcelConditionExistsASB(condtype) {
-var pcResult = aa.parcelCondition.getParcelConditions(ParcelValidatedNumber);
-if (!pcResult.getSuccess()) {
-logDebug("**WARNING: error getting parcel conditions : " + pcResult.getErrorMessage());
-return false;
-}
-var pcs = pcResult.getOutput();
-for (var pc1 in pcs) {
-if (pcs[pc1].getConditionType().equals(condtype)) {
-return true;
-}
-}
-}
-
-function sumASITColumn(tObj, cNameToSum) {
-	// optional params = cFilterType, cNameFilter, cValueFilter
-	var retValue = 0;
-	if (tObj) {
-		if (arguments.length == 2) { // no filters
-			for (var ea in tObj) {
-				var row = tObj[ea];
-				var colValue = row[cNameToSum].fieldValue;
-				if (!isNaN(parseFloat(colValue))) 
-					retValue += parseFloat(colValue);
-			}
-			return retValue;
-		}
-		if (arguments.length == 5) {
-			filterType = arguments[2];
-			cNameFilter = arguments[3];
-			cValueFilter = arguments[4];
-			for (var ea in tObj) {
-				var row = tObj[ea];
-				var colValue = row[cNameToSum].fieldValue;
-				var colFilter = row[cNameFilter].fieldValue;
-				if (filterType == "INCLUDE") {
-					if (colFilter == cValueFilter) {
-						if (!isNaN(parseFloat(colValue))) 
-							retValue += parseFloat(colValue);
-					}
-				}
-				if (filterType == "EXCLUDE") {
-					if (colFilter != cValueFilter) {
-						if (!isNaN(parseFloat(colValue))) 
-							retValue += parseFloat(colValue);
-					}
-				}
-			}
-		}
-	}
-	return retValue;
-}
