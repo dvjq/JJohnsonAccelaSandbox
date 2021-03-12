@@ -1,0 +1,3 @@
+//doConfigurableScriptActions();
+
+copyParcelGisObjects();

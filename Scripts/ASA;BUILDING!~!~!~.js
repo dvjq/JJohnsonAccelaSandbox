@@ -1,0 +1,1 @@
+if (!publicUser) include("CTRCA:Building/*/*/*");
