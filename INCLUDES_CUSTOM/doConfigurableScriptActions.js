@@ -99,4 +99,5 @@ function doConfigurableScriptActions() {
 			handleError(err);
 		}
 	}
+	am.debug();
 }
