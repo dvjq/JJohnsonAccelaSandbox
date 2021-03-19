@@ -15,7 +15,7 @@
         },
         "action": {
           "notificationTemplate": "SS_ADDITIONAL_INFO_REQD",
-          "notificationReport": [],
+          "notificationReport": ["TaskCommentLetter"],
           "notifyContactTypes": [
             "Authorized Agent",
             "Business Entity"

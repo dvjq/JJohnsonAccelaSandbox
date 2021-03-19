@@ -246,6 +246,8 @@ function runReportAndSendAsync(reportName, module, itemCapId, reportParameters, 
 	envParameters.put("WaitTime", waitTime);
 	envParameters.put("EventName", controlString);
 
+	am.log("Report name: "+reportName);
+
 	aa.runAsyncScript(scriptName, envParameters);
 	logDebug("(runReportAndSendAsync) Calling runAsyncScript for " + emailTemplate);
 }
@@ -740,6 +742,7 @@ function sendContactEmails(itemCapId, recordSettings, parameters) {
 					// the reason for this is that the business rules from the application are used
 					itemCapId = storedCapId;
 				}
+				am.log("Report to run: " + rNotificationReport);
 				runReportAndSendAsync("", itemModule, itemCapId, rptParams, rFromEmail, "", rNotificationTemplate, eParams, "", 1);
 			} else {
 
