@@ -246,8 +246,6 @@ function runReportAndSendAsync(reportName, module, itemCapId, reportParameters, 
 	envParameters.put("WaitTime", waitTime);
 	envParameters.put("EventName", controlString);
 
-	am.log("Report name: "+reportName);
-
 	aa.runAsyncScript(scriptName, envParameters);
 	logDebug("(runReportAndSendAsync) Calling runAsyncScript for " + emailTemplate);
 }
@@ -743,7 +741,7 @@ function sendContactEmails(itemCapId, recordSettings, parameters) {
 					itemCapId = storedCapId;
 				}
 				am.log("Report to run: " + rNotificationReport);
-				runReportAndSendAsync(rNotificationReport, itemModule, itemCapId, rptParams, rFromEmail, "", rNotificationTemplate, eParams, "", 1);
+				runReportAndSendAsync("", itemModule, itemCapId, rptParams, rFromEmail, "", rNotificationTemplate, eParams, "", 1);
 			} else {
 
 				//an email needs to be sent to a specified contact type when all fees have been paid.
