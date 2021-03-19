@@ -56,8 +56,6 @@ var inspResult = "";
 
 var testMode = false;
 
-am.log("Report in async: " + reportName);
-
 var currentUserID = aa.env.getValue("CurrentUserID");
 if (matches(currentUserID, null, "")) {
 	currentUserID = "ADMIN";
@@ -86,6 +84,26 @@ if (capIDArray && capIDArray[0]) {
 if (capId == null) {
 	capId = aa.cap.getCapID(capIDString).getOutput();
 }
+
+function getScriptText(vScriptName, servProvCode, useProductScripts) {
+	if (!servProvCode) servProvCode = aa.getServiceProviderCode();
+	vScriptName = vScriptName.toUpperCase();
+	var emseBiz = aa.proxyInvoker.newInstance("com.accela.aa.emse.emse.EMSEBusiness").getOutput();
+	try {
+		if (useProductScripts) {
+			var emseScript = emseBiz.getMasterScript(aa.getServiceProviderCode(), vScriptName);
+		} else {
+			var emseScript = emseBiz.getScriptByPK(aa.getServiceProviderCode(), vScriptName, "ADMIN");
+		}
+		return emseScript.getScriptText() + "";
+	} catch (err) {
+		return "";
+	}
+}
+
+eval(getScriptText("INCLUDES_ACCELA_FUNCTIONS", null, true));
+eval(getScriptText("INCLUDES_CUSTOM", null, true));
+eval(getScriptText("CONFIGURABLE_SCRIPTS_COMMON"));
 
 aa.env.setValue("PermitId1", capId.getID1());
 aa.env.setValue("PermitId2", capId.getID2());
@@ -117,25 +135,6 @@ if (matches(systemMailFrom, null, "")) {
 }
 
 var scriptSuffix = "SEND_CONTACT_EMAILS";
-
-function getScriptText(vScriptName, servProvCode, useProductScripts) {
-	if (!servProvCode) servProvCode = aa.getServiceProviderCode();
-	vScriptName = vScriptName.toUpperCase();
-	var emseBiz = aa.proxyInvoker.newInstance("com.accela.aa.emse.emse.EMSEBusiness").getOutput();
-	try {
-		if (useProductScripts) {
-			var emseScript = emseBiz.getMasterScript(aa.getServiceProviderCode(), vScriptName);
-		} else {
-			var emseScript = emseBiz.getScriptByPK(aa.getServiceProviderCode(), vScriptName, "ADMIN");
-		}
-		return emseScript.getScriptText() + "";
-	} catch (err) {
-		return "";
-	}
-}
-
-eval(getScriptText("INCLUDES_ACCELA_FUNCTIONS", null, true));
-eval(getScriptText("INCLUDES_CUSTOM", null, true));
 
 try {
 	var rParams = aa.util.newHashMap();
@@ -178,7 +177,6 @@ try {
 	// ***********************************************************************
 
 	// This should be included in all Configurable Scripts
-	eval(getScriptText("CONFIGURABLE_SCRIPTS_COMMON"));
 	var settingsArray = [];
 	var vIsConfigurableScript = isConfigurableScript(settingsArray, scriptSuffix);
 
@@ -209,6 +207,7 @@ try {
 			aa.sendMail(systemMailFrom, debugEmailTo, "", "Post Debug Information in Sending Report Script", debug);
 		}
 	}
+	am.debug();
 } catch (err) {
 	asyncDebug("**ERROR: Exception while verification the rules for " + scriptSuffix + ". Error: " + err);
 	asyncDebug("(RUNREPORTANDSENDASYNC) A JavaScript Error occured: " + err.message + " at line " + err.lineNumber + " stack: " + err.stack);
