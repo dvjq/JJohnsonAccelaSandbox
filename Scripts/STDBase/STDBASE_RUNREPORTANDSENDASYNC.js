@@ -140,7 +140,7 @@ eval(getScriptText("INCLUDES_CUSTOM", null, true));
 try {
 	var rParams = aa.util.newHashMap();
 	if (reportParameters && !reportParameters.getClass) {
-		rParams = convertStringToHashMap(String(reportParamters));
+		rParams = convertStringToHashMap(String(reportParameters));
 	} else if (reportParameters && reportParameters.getClass().toString() == "class java.util.HashMap") {
 		rParams = reportParameters;
 	}
@@ -213,6 +213,7 @@ try {
 	asyncDebug("**ERROR: Exception while verification the rules for " + scriptSuffix + ". Error: " + err);
 	asyncDebug("(RUNREPORTANDSENDASYNC) A JavaScript Error occured: " + err.message + " at line " + err.lineNumber + " stack: " + err.stack);
 	aa.sendMail(systemMailFrom, debugEmailTo, "", "EXCEPTION: Debug Information in Sending Report Script", debug);
+	handleError(err, "STDBASE_RUNREPORTANDSENDASYNC");
 }
 
 // ======================================================================
@@ -471,7 +472,7 @@ function sendContactEmailsAsync(itemCapId, recordSettings, parameters) {
 	var rReportingInfoStandards = handleUndefined(recordSettings.action.reportingInfoStandards, false);
 	var rBalanceAllowed = handleUndefined(recordSettings.action.balanceAllowed, false);
 
-	am.log("Report name: " + rNotificationReport);
+	asyncDebug("Report name: " + rNotificationReport);
 
 	// VALIDATE FUNCTION PARAMETERS
 	// validate required parameters, log error and return false if required parameters are missing
@@ -722,10 +723,10 @@ function sendContactEmailsAsync(itemCapId, recordSettings, parameters) {
 						for (xReport in repTypeArray) {
 							var report = repTypeArray[xReport];
 							if (!matches(rEmavLPEmaililTo, null, undefined, "") && vLPEmail.indexOf("@") > 0) {
-								am.log("emlrpt:" + report);
+								asyncDebug("emlrpt:" + report);
 								runReport4EmailLocal(itemCapId, report, vLPEmail, rptParamsLP, eParamsLP, rNotificationTemplate, itemModule, rFromEmail, rUrl4ACA);
 							} else {
-								am.log("runrpt:" + report);
+								asyncDebug("runrpt:" + report);
 								if (!reportAttached) {
 									runReportAttach(itemCapId, report, rptParamsLP);
 								}
@@ -738,6 +739,7 @@ function sendContactEmailsAsync(itemCapId, recordSettings, parameters) {
 			asyncDebug("Exception generating emails : " + err);
 			asyncDebug("(RUNREPORTANDSENDASYNC) A JavaScript Error occured: " + err.message + " at line " + err.lineNumber + " stack: " + err.stack);
 			aa.sendMail(systemMailFrom, debugEmailTo, "", "EXCEPTION: Debug Information in Sending Report Script", debug);
+			handleError(err, "STDBASE_RUNREPORTANDSENDASYNC");
 		}
 	}
 }
@@ -886,7 +888,6 @@ function matches(eVal, argList) {
 function asyncDebug(dstr) {
 	aa.debug(aa.getServiceProviderCode() + " : " + " : " + capId.getCustomID() + " -- ", dstr);
 	debug += dstr + br;
-	am.log(dstr);
 }
 
 function wait(ms) {
