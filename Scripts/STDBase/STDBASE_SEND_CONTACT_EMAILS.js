@@ -743,7 +743,7 @@ function sendContactEmails(itemCapId, recordSettings, parameters) {
 					itemCapId = storedCapId;
 				}
 				am.log("Report to run: " + rNotificationReport);
-				runReportAndSendAsync("", itemModule, itemCapId, rptParams, rFromEmail, "", rNotificationTemplate, eParams, "", 1);
+				runReportAndSendAsync(rNotificationReport, itemModule, itemCapId, rptParams, rFromEmail, "", rNotificationTemplate, eParams, "", 1);
 			} else {
 
 				//an email needs to be sent to a specified contact type when all fees have been paid.
